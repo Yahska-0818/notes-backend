@@ -52,25 +52,21 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.put('/api/notes/:id', (request, response) => {
-  const id = request.params.id
+app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  const noteIndex = notes.findIndex(note => note.id === id)
-
-  if (noteIndex === -1) {
-    return response.status(404).json({ error: 'Note not found' })
+  if (!body.content) {
+    return response.status(400).json({ error: 'content missing' })
   }
 
-  const updatedNote = {
-    ...notes[noteIndex],
+  const note = new Note({
     content: body.content,
-    important: body.important,
-  }
+    important: body.important || false,
+  })
 
-  notes[noteIndex] = updatedNote
-
-  response.json(updatedNote)
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
