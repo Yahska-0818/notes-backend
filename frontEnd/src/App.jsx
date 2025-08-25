@@ -54,6 +54,10 @@ const App = () => {
       })
   }
 
+  if (user) {
+    console.log(user)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -120,7 +124,7 @@ const App = () => {
 
       {!user && loginForm()}
       {user && <div>
-        <p>{user.name} logged in</p>
+        <p>{user.username} logged in</p>
         <Togglable buttonLabel='new note' ref={noteFormRef}>
           <NoteForm createNote={addNote} />
         </Togglable>
